@@ -105,7 +105,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn parse_domain_correctly() {
+    fn parses_domain_correctly() {
         let data = "\
 public record Station(
         UUID id,
