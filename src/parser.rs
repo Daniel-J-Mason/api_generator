@@ -99,3 +99,47 @@ fn parse_object(line: &str) -> Result<JavaObject, &str> {
         variable_name: String::from(variable_name),
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_domain_correctly() {
+        let data = "\
+public record Station(
+        UUID id,
+        Long marketId
+) {
+}";
+        let result = parse_content(data.to_string());
+        assert!(result.is_ok());
+        let domain = result.unwrap();
+        assert_eq!(domain.name, "Station");
+        assert_eq!(domain.objects.len(), 2);
+        assert_eq!(domain.objects[0].class, "UUID");
+        assert_eq!(domain.objects[0].variable_name, "id");
+        assert_eq!(domain.objects[1].class, "Long");
+        assert_eq!(domain.objects[1].variable_name, "marketId");
+    }
+
+    #[test]
+    fn parses_name_correctly() {
+        let line = "public record Station(";
+
+        let result = parse_name(line).unwrap();
+
+        assert_eq!("Station", &result);
+    }
+
+    #[test]
+    fn parses_object_correctly() {
+        let line = "List<> someList,";
+
+        let result = parse_object(line).unwrap();
+
+        assert_eq!("List<>", &result.class);
+        assert_eq!("someList", &result.variable_name);
+    }
+
+}
