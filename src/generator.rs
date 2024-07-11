@@ -23,7 +23,7 @@ fn generate_dto(java_domain: &JavaDomain, path: &str) -> std::io::Result<()>{
 
     let mut file = File::create(path)?;
 
-    let mut data = format!("{}", "@Schema(name = \"StationDto\")");
+    let mut data = format!("{}", format!("@Schema(name = \"{}Dto\")", &java_domain.name));
     data.push_str("\n@Builder");
     data.push_str("\n@Jacksonized");
     data.push_str(&format!("\npublic record Rest{}Dto(", java_domain.name));
